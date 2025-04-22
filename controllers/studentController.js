@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.SECRET_KEY || 'default_secret_key';
 
 exports.getStudents = async (req, res) => {
   try {
@@ -52,7 +52,11 @@ exports.updateStudent = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const updatedStudent = await Student.findByIdAndUpdate(studentId, { name, email, phone, city, gender, courses }, { new: true, runValidators: true });
+    const updatedStudent = await Student.findByIdAndUpdate(
+      studentId,
+      { name, email, phone, city, gender, courses },
+      { new: true, runValidators: true }
+    );
 
     if (!updatedStudent) {
       return res.status(404).json({ message: 'Student not found' });
@@ -81,29 +85,32 @@ exports.deleteStudent = async (req, res) => {
   }
 };
 
-
 exports.loginStudent = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-        // Check if email exists in the database
-        const student = await Student.findOne({ email });
-        if (!student) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }
-
-        // Compare provided password with the stored hashed password
-        const isMatch = await bcrypt.compare(password, student.password);
-        if (!isMatch) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }
-
-        // Generate a JWT token for authentication
-        const token = jwt.sign({ id: student._id, name: student.name,
-          email: student.email }, SECRET_KEY, { expiresIn: "1h" });
-
-        res.status(200).json({ message: "Login successful", token });
-    } catch (error) {
-        res.status(500).json({ message: "Error logging in" });
+    // Check if email exists in the database
+    const student = await Student.findOne({ email });
+    if (!student) {
+      return res.status(400).json({ message: "Invalid email or password" });
     }
+
+    // Compare provided password with the stored hashed password
+    const isMatch = await bcrypt.compare(password, student.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Generate a JWT token for authentication
+    const token = jwt.sign(
+      { id: student._id, name: student.name, email: student.email },
+      SECRET_KEY,
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ message: "Login successful", token });
+  } catch (error) {
+    console.error("Login error:", error); // Better error visibility
+    res.status(500).json({ message: "Error logging in", error: error.message });
+  }
 };
