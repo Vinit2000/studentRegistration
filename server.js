@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
-  'http://localhost:5173',             // local
+  //'http://localhost:5173',             // local
    'https://studentregistration-front-end.vercel.app',     // your deployed frontend (e.g., Netlify/Vercel)
 ];
 
