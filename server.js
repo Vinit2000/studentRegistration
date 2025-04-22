@@ -14,8 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 // List of allowed origins for CORS (Cross-Origin Resource Sharing)
 const allowedOrigins = [
-  'http://localhost:5173', // Local development frontend URL
-  // 'https://your-frontend-url.com', // Add your deployed frontend URL here
+  'https://studentregistration-front-end.vercel.app', // Add your deployed frontend URL here
 ];
 // Enable CORS with custom configuration
 app.use(cors({
