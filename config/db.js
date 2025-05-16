@@ -4,9 +4,7 @@ require('dotenv').config(); // Loading environment variables from .env file
 // Fetch the MongoDB connection string from environment variables
 const CONNECTION_STRING = process.env.MONGO_URI;
 
-/**
- * Function to connect to MongoDB using Mongoose
- */
+/* Function to connect to MongoDB using Mongoose */
 const connectToDatabase = async () => {
   try {
     // Connect to MongoDB using the provided connection string
