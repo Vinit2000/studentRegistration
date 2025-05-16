@@ -1,8 +1,6 @@
 const mongoose = require("mongoose")
 
-/**
- * Define Mongoose Schema & Model for the "studentsReg" collection
- */
+/* Define Mongoose Schema & Model for the "studentsReg" collection */
 const studentSchema = new mongoose.Schema({
     name: { 
       type: String, 
